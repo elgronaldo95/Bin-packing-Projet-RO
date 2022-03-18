@@ -89,6 +89,51 @@ function parser_data2D(nomFichier::String)
     return donnees2D(L,H,nb,tab)
 end
 
+struct bin1D
+    longueur::Int64
+    taille_disponible::Int64
+    tab::Vector{objet1D}
+end
+
+function objToTuple(obj::objet1D)
+
+    return obj.taille,obj.nb; 
+end
+
+function listeObjetToTuple(listeObjet::Vector{objet1D})
+
+    nouvelleList::Vector{Tuple{Int64,Int64}}
+
+    for obj in listeObjet
+        nouveauTuple::Tuple{Int64,Int64} = objToTuple(obj)
+        append!(nouvelleList,nouveauTuple)
+    end
+
+    return nouvelleList
+end
+
+function trieObjet(listeObjet::Vector{objet1D})
+
+    listeTuple::Vector{Tuple{Int64,Int64}} = listeObjetToTuple(listeObjet)
+
+    sort!(listeTuple,by = x -> x[1]);
+
+    return listeTuple
+end
+
+function heuristique_fit1D(listeObjet::Vector{objet1D})
+
+    listeTuple::Vector{Tuple{Int64,Int64}} =trieObjet(listeObjet)
+
+    listBin::Vector{bin1D} 
+
+    for t in listeTuple
+        for b in listBin
+
+        end
+    end
+
+end
 
 # Exemple de script (à adapter) pour résoudre des séries d'instances
 #=
