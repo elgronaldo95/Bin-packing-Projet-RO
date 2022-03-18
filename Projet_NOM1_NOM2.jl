@@ -1,4 +1,4 @@
-# NOM1 Prénom1 - NOM2 Prénom2
+# TANKO Dominik
 
 using JuMP, GLPK # On va utiliser JuMP et GLPK
 
