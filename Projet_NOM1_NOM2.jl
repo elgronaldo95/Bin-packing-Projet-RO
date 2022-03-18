@@ -1,4 +1,5 @@
-# TANKO Dominik
+# TANKO Dominik et SAMBA Gloire
+# Groupe 684
 
 using JuMP, GLPK # On va utiliser JuMP et GLPK
 
