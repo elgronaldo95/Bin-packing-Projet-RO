@@ -12,7 +12,7 @@ end
 
 struct donnees1D
 	T::Int64 # Taille d'un bin
-    nb::Int64 # Nombre de tailles d'objet différents
+    nb::Int64 # Nombre d'objet de tailles différents
 	tab::Vector{objet1D} # Tableau des objets à insérer dans les bins
 end
 
@@ -90,6 +90,7 @@ function parser_data2D(nomFichier::String)
     return donnees2D(L,H,nb,tab)
 end
 
+include("heuristique_best-fit.jl")
 
 # Exemple de script (à adapter) pour résoudre des séries d'instances
 #=
@@ -104,5 +105,17 @@ function scriptMonoA()
 	end
 end
 =#
+
+function scriptMonoA()
+	d::donnees1D = parser_data1D("Instances/1Dim/A/A4.dat")
+	maFonctionQuiResoutTropBienLeCasMonoDimensionnel(d) # Première résolution à part pour que le code soit compilé
+
+	indices::Vector{Int64} = [4,5,6,7,8,9,10,15,20]
+	for i in indices
+		d = parser_data1D("Instances/1Dim/A/A$i.dat")
+		@time maFonctionQuiResoutTropBienLeCasMonoDimensionnel(d)
+	end
+end
+
 
 # A vous de faire le reste...

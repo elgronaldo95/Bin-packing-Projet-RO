@@ -1,21 +1,6 @@
 
-
-using JuMP, GLPK # On va utiliser JuMP et GLPK
-
-# Structures contenant les données d'un problème de bin-packing mono-dimensionnel
-struct objet1D
-	taille::Int64 # Taille de l'objet
-	nb::Int64 # Nombre d'objets de la même taille
-end
-
-struct donnees1D
-	T::Int64 # Taille d'un bin
-    nb::Int64 # Nombre de tailles d'objet différents
-	tab::Vector{objet1D} # Tableau des objets à insérer dans les bins
-end
-
 # Structure représentant un bin
-struct bin1D
+mutable struct bin1D
     taille::Int64
     taille_disponible::Int64
     tab::Vector{objet1D}
@@ -24,42 +9,60 @@ end
 
 # Converti un objet 1D en un tuple (taille, nb)
 function objet1D_en_tuple(obj::objet1D)
-    return obj.taille,obj.nb; 
+    return obj.taille,obj.nb
 end
 
 # Converti une liste d'objet en une liste de tuple
 function liste_objet_en_tuple(listeObjet::Vector{objet1D})
 
-    nouvelleListe::Vector{Tuple{Int64,Int64}}
+    taille::Int64 = length(listeObjet)
+
+    nouvelleListe = Vector{Tuple{Int64,Int64}}()
 
     for obj in listeObjet
-        nouveauTuple::Tuple{Int64,Int64} = objet1D_en_tuple(obj)
-        append!(nouvelleListe,nouveauTuple)
+        nouveauTuple = objet1D_en_tuple(obj)
+        append!(nouvelleListe,[nouveauTuple])
     end
 
     return nouvelleListe
 end
 
+# Trie une liste d'objet par ordre croissant de leur taille
 function trie_objet1D(listeObjet::Vector{objet1D})
 
-    listeTuple::Vector{Tuple{Int64,Int64}} = liste_objet_en_tuple(listeObjet)
+    resListeObjet = Vector{objet1D}()
+    listeTuple = liste_objet_en_tuple(listeObjet)
 
     sort!(listeTuple,by = x -> x[1]);
 
-    return listeTuple
+    for t in listeTuple
+        newObj = objet1D(t[1], t[2])
+        append!(resListeObjet, [newObj])
+    end
+    return resListeObjet
 end
 
-function heuristique_fit1D(listeObjet::Vector{objet1D})
+function heuristique_fit1D(d1D::donnees1D)
+    listeObjet::Vector{objet1D} = trie_objet1D(d1D.tab)
 
-    listeTuple::Vector{Tuple{Int64,Int64}} = trie_objet1D(listeObjet)
+    # listeObjetTrie::Vector{objet1D} = trie_objet1D(listeObjet)
 
-    listBin::Vector{bin1D} 
+    tailleBin::Int64 = d1D.T
+
+    newBin::bin1D(tailleBin, tailleBin, [])
+
+    listeBin::Vector{bin1D} = [newBin]
+
+    binPlusRempli = listeBin[1]
 
 	# TODO
-    for t in listeTuple
-        for b in listBin
-
-        end
-    end
+    # for obj in listeObjet
+    #     if binPlusRempli.taille_disponible >= obj.taille
+    # end
 
 end
+
+#= ************************* DEBUG ************************* =#
+l_obj = [objet1D(5,3), objet1D(2,1), objet1D(3,3), objet1D(1,1)]
+
+l_obj_trie = trie_objet1D(l_obj)
