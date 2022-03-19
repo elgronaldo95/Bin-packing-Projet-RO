@@ -107,13 +107,13 @@ end
 =#
 
 function scriptMonoA()
-	d::donnees1D = parser_data1D("Instances/1Dim/A/A4.dat")
-	maFonctionQuiResoutTropBienLeCasMonoDimensionnel(d) # Première résolution à part pour que le code soit compilé
+	d = parser_data1D("Instances/1Dim/A/A4.dat")
+	heuristique_fit1D(d) # Première résolution à part pour que le code soit compilé
 
-	indices::Vector{Int64} = [4,5,6,7,8,9,10,15,20]
+	indices = [4,5,6,7,8,9,10,15,20]
 	for i in indices
 		d = parser_data1D("Instances/1Dim/A/A$i.dat")
-		@time maFonctionQuiResoutTropBienLeCasMonoDimensionnel(d)
+		@time heuristique_fit1D(d)
 	end
 end
 

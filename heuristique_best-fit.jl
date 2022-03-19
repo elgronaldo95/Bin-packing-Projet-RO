@@ -29,7 +29,6 @@ end
 
 # Trie une liste d'objet par ordre croissant de leur taille
 function trie_objet1D(listeObjet::Vector{objet1D})
-
     resListeObjet = Vector{objet1D}()
     listeTuple = liste_objet_en_tuple(listeObjet)
 
@@ -42,23 +41,30 @@ function trie_objet1D(listeObjet::Vector{objet1D})
     return resListeObjet
 end
 
+# Retourne le bin le plus rempli dans une liste
+function trouve_bin_plus_rempli(listeBin::Vector{bin1D})
+
+
+end
+
+
 function heuristique_fit1D(d1D::donnees1D)
-    listeObjet::Vector{objet1D} = trie_objet1D(d1D.tab)
+    listeObjet = trie_objet1D(d1D.tab)
 
-    # listeObjetTrie::Vector{objet1D} = trie_objet1D(listeObjet)
+    listeObjetTrie = trie_objet1D(listeObjet)
 
-    tailleBin::Int64 = d1D.T
+    tailleBin = d1D.T
 
-    newBin::bin1D(tailleBin, tailleBin, [])
+    newBin = bin1D(tailleBin, tailleBin, [])
 
-    listeBin::Vector{bin1D} = [newBin]
+    listeBin = [newBin]
 
     binPlusRempli = listeBin[1]
 
 	# TODO
-    # for obj in listeObjet
-    #     if binPlusRempli.taille_disponible >= obj.taille
-    # end
+    for obj in listeObjet
+        if binPlusRempli.taille_disponible >= obj.taille
+    end
 
 end
 
@@ -66,3 +72,4 @@ end
 l_obj = [objet1D(5,3), objet1D(2,1), objet1D(3,3), objet1D(1,1)]
 
 l_obj_trie = trie_objet1D(l_obj)
+
