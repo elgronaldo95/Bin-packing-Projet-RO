@@ -41,35 +41,47 @@ function trie_objet1D(listeObjet::Vector{objet1D})
     return resListeObjet
 end
 
-# Retourne le bin le plus rempli dans une liste
-function trouve_bin_plus_rempli(listeBin::Vector{bin1D})
+# Retourne une liste d'objet où chaque objet est unique
+function flatten_liste_objet1D(listeObjet::Vector{objet1D})
+    resListeObjet = Vector{objet1D}()
 
-
+    for obj in listeObjet
+        for i in 1:obj.nb
+            newObj = objet1D(obj.taille, 1)
+            append!(resListeObjet, [newObj])
+        end
+    end
+    return resListeObjet
 end
 
-
 function heuristique_fit1D(d1D::donnees1D)
-    listeObjet = trie_objet1D(d1D.tab)
 
-    listeObjetTrie = trie_objet1D(listeObjet)
+    listeObjet = flatten_liste_objet1D(trie_objet1D(d1D.tab))
 
     tailleBin = d1D.T
 
     newBin = bin1D(tailleBin, tailleBin, [])
-
     listeBin = [newBin]
-
-    binPlusRempli = listeBin[1]
 
 	# TODO
     for obj in listeObjet
-        if binPlusRempli.taille_disponible >= obj.taille
+        for b in listeBin
+            if b.taille_disponible >= obj.taille
+                append!(b.tab, obj)
+                b.taille_disponible = (b.taille_disponible - obj.taille)
+            else
+                newBin = bin1D(tailleBin, tailleBin, [])
+            end
+        end
     end
 
 end
 
-#= ************************* DEBUG ************************* =#
+#= ************************* DEBUG AND TESTS ************************* =#
 l_obj = [objet1D(5,3), objet1D(2,1), objet1D(3,3), objet1D(1,1)]
 
 l_obj_trie = trie_objet1D(l_obj)
 
+l_obj_flat = flatten_liste_objet1D(l_obj_trie)
+
+l_obj_final = flatten_liste_objet1D(trie_objet1D([objet1D(5,3), objet1D(2,1), objet1D(3,3), objet1D(1,1)]))
