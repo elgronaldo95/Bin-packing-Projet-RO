@@ -33,9 +33,9 @@ function modelisation_direct(d::donnees1D)
         # Déclaration de la fonction objectif (avec le sens d'optimisation)
         @objective(m, Min, sum(y[j] for j in 1:nombre_bin ) )
 
-        @constraint(m,bin_ouvert[j=1:nombre_bin], sum(d.tab[i].taille*x[i,j] for i in 1:nombre_bin) == d.T*y[j])
+        @constraint(m,bin_ouvert[i=1:nombre_objet], sum(x[i,j] for j in 1:nombre_bin) == 1 )
 
-        @constraint(m,taille[i= 1:nombre_objet,])
+        @constraint(m,taille[i= 1:nombre_objet],sum(d.tab[i].taille*x[i,j] for i in 1:nombre_bin) <= d.T*y[j])
 
         return m
 end
