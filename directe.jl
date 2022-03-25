@@ -38,3 +38,26 @@ function modelisation_direct(d::donnees1D)
 
         return m
 end
+
+
+function scriptMonoJouetA()
+	d::donnees1D = parser_data1D("Instances/1Dim/A/jouet.dat")
+	
+    m = modelisation_direct(d)
+
+    optimize!(m)
+
+    status = termination_status(m)
+
+    if status == MOI.OPTIMAL
+        println("Problème résolu à l'optimalité")
+
+        println("z = ", objective_value(m))
+    elseif status == MOI.INFEASIBLE
+        println("Problème non-borné")
+
+    elseif status == MOI.INFEASIBLE_OR_UNBOUNDED
+        println("Problème impossible")
+    end
+
+end
