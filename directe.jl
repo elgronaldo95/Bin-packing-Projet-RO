@@ -41,11 +41,11 @@ end
 
 
 function scriptMonoJouetA()
-	d::donnees1D = parser_data1D("Instances/1Dim/A/jouet.dat")
+	d::donnees1D = parser_data1D("Instances/1Dim/A/Jouet.dat")
 	
-    m = modelisation_direct(d)
+    @time m = modelisation_direct(d)
 
-    optimize!(m)
+    @time optimize!(m)
 
     status = termination_status(m)
 
@@ -53,6 +53,7 @@ function scriptMonoJouetA()
         println("Problème résolu à l'optimalité")
 
         println("z = ", objective_value(m))
+
     elseif status == MOI.INFEASIBLE
         println("Problème non-borné")
 
