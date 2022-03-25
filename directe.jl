@@ -1,29 +1,28 @@
 using JuMP, GLPK
 
-using Printf
+function tabObjetTailleReelle(d::donnees1D)
+    tabTailleReelle::Vector{Int64} = []
 
-function compte_objet(d::donnees1D)
-
-    nobj::Int64 = 0
-
-    for i in d.nb
-
-        nobj += d.tab[i].nb
-
+    for i in d.tab
+        objets_restants::Int64 = i.nb
+        while objets_restants > 0
+            push!(tabTailleReelle, i.taille)
+            objets_restants -= 1
+        end
     end
 
-    return nobj
-
+    return tabTailleReelle;
 end
 
 function modelisation_direct(d::donnees1D)
 
-        m= Model(GLPK.Optimizer)
+        m = Model(GLPK.Optimizer)
 
-        nombre_bin::Int64 =  heuristique_best_fit(d)
+        nombre_bin =  heuristique_best_fit(d)
+        # nombre_objet = compte_objet(d)
 
-
-        nombre_objet::int64 = compte_objet(d)
+        tab_objet = tabObjetTailleReelle(d)
+        nombre_objet = size(tab_objet, 1)
 
         # Déclaration des variables
         @variable(m,x[1:nombre_objet,1:nombre_bin], binary = true)
@@ -35,7 +34,7 @@ function modelisation_direct(d::donnees1D)
 
         @constraint(m,bin_ouvert[i=1:nombre_objet], sum(x[i,j] for j in 1:nombre_bin) == 1 )
 
-        @constraint(m,taille[i= 1:nombre_objet],sum(d.tab[i].taille*x[i,j] for i in 1:nombre_bin) <= d.T*y[j])
+        @constraint(m,taille[j=1:nombre_bin], sum(tab_objet[i]*x[i,j] for i in 1:nombre_objet) <= d.T*y[j])
 
         return m
 end
