@@ -92,18 +92,19 @@ end
 
 # include("heuristique_best-fit.jl")
 include("heuristique_best-fit_v2.jl")
+include("directe.jl")
 
 
 # Exemple de script (à adapter) pour résoudre des séries d'instances
 
 function scriptMonoA()
 	d::donnees1D = parser_data1D("Instances/1Dim/A/A4.dat")
-	modele_heuristique_best_fit(d) # Première résolution à part pour que le code soit compilé
+	modelisation_direct(d) # Première résolution à part pour que le code soit compilé
 
 	indices::Vector{Int64} = [4,5,6,7,8,9,10,15,20]
 	for i in indices
 		d = parser_data1D("Instances/1Dim/A/A$i.dat")
-		@time modele_heuristique_best_fit(d)
+		@time modelisation_direct(d)
 	end
 end
 
