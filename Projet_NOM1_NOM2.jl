@@ -90,32 +90,35 @@ function parser_data2D(nomFichier::String)
     return donnees2D(L,H,nb,tab)
 end
 
-include("heuristique_best-fit.jl")
+# include("heuristique_best-fit.jl")
+include("heuristique_best-fit_v2.jl")
+
 
 # Exemple de script (à adapter) pour résoudre des séries d'instances
-#=
+
 function scriptMonoA()
 	d::donnees1D = parser_data1D("Instances/1Dim/A/A4.dat")
-	maFonctionQuiResoutTropBienLeCasMonoDimensionnel(d) # Première résolution à part pour que le code soit compilé
+	modele_heuristique_best_fit(d) # Première résolution à part pour que le code soit compilé
 
 	indices::Vector{Int64} = [4,5,6,7,8,9,10,15,20]
 	for i in indices
 		d = parser_data1D("Instances/1Dim/A/A$i.dat")
-		@time maFonctionQuiResoutTropBienLeCasMonoDimensionnel(d)
+		@time modele_heuristique_best_fit(d)
 	end
 end
-=#
 
-function scriptMonoA()
-	d = parser_data1D("Instances/1Dim/A/A4.dat")
-	heuristique_fit1D(d) # Première résolution à part pour que le code soit compilé
 
-	indices = [4,5,6,7,8,9,10,15,20]
-	for i in indices
-		d = parser_data1D("Instances/1Dim/A/A$i.dat")
-		@time heuristique_fit1D(d)
-	end
-end
+# function scriptMonoA()
+# 	d = parser_data1D("Instances/1Dim/A/A4.dat")
+# 	heuristique_fit1D(d) # Première résolution à part pour que le code soit compilé
+
+# 	indices = [4,5,6,7,8,9,10,15,20]
+# 	for i in indices
+# 		d = parser_data1D("Instances/1Dim/A/A$i.dat")
+# 		@time heuristique_fit1D(d)
+# 	end
+# end
+
 
 
 # A vous de faire le reste...
