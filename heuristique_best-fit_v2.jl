@@ -1,37 +1,41 @@
-################# METHODE HEURISTIQUE BEST-FIT ####################
+# Dominik TANKO Gloire SAMBA 684I
+# Modele heuristique best-fit
 
-function modele_heuristique_best_fit(d::donnees1D)
+function heuristique_best_fit(d::donnees1D)
 
-    sort!(d.tab, by = x -> x.taille, rev = true)
+    # D'abord on trie le tebleau des objets
+    # rev = true : faut trier à l'inverse
+    # alg = QuickSort : d'après les tests, QuickSort est le plus efficace
+    sort!(d.tab, by = x -> x.taille, rev = true, alg = QuickSort)
 
-    #Liste de la taille disponible dans chaque contenaires
-    liste_bin::Vector{Int64} = [d.T]
+    # Liste de la taille disponible dans chaque bin
+    l_taille_dispo = [d.T]
 
-    #Vaut true si l'objet à été rangé dans un bin
-    objectStored::Bool = false
+    # Vrai si l'objet à été rangé dans un bin
+    estObjetRange = false
 
     for i in d.tab
 
-        #nombre restant d'objets de la même taille
-        nbLeft::Int64 = i.nb
-        while nbLeft > 0
-            objectStored = false
+        # Objets restant de la même taille
+        objets_restants = i.nb
+        while objets_restants > 0
+            estObjetRange = false
 
-            #Indice de liste_bin
-            j::Int64 = 1
-            while (!objectStored && (j <= size(liste_bin, 1)))
-                if (liste_bin[j] >= i.taille)
-                    liste_bin[j] -= i.taille
-                    objectStored = true
+            # Indice de l_taille_dispo
+            j = 1
+            while (!estObjetRange && (j <= size(l_taille_dispo, 1)))
+                if (l_taille_dispo[j] >= i.taille)
+                    l_taille_dispo[j] -= i.taille
+                    estObjetRange = true
                 else
                     j += 1
                 end
             end
-            if !objectStored
-                push!(liste_bin, (d.T - i.taille))
+            if !estObjetRange
+                push!(l_taille_dispo, (d.T - i.taille))
             end
-            nbLeft -= 1
+            objets_restants -= 1
         end
     end
-    return size(liste_bin, 1)
+    return size(l_taille_dispo, 1)
 end
