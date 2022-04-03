@@ -91,7 +91,7 @@ function parser_data2D(nomFichier::String)
 end
 
 # include("heuristique_best-fit.jl")
-include("heuristique_best-fit_v2.jl")
+include("heuristique_best-fit.jl")
 include("motifs.jl")
 include("directe.jl")
 include("indirecte.jl")
@@ -109,19 +109,3 @@ function scriptMonoA()
 		@time modelisation_direct(d)
 	end
 end
-
-
-# function scriptMonoA()
-# 	d = parser_data1D("Instances/1Dim/A/A4.dat")
-# 	heuristique_fit1D(d) # Première résolution à part pour que le code soit compilé
-
-# 	indices = [4,5,6,7,8,9,10,15,20]
-# 	for i in indices
-# 		d = parser_data1D("Instances/1Dim/A/A$i.dat")
-# 		@time heuristique_fit1D(d)
-# 	end
-# end
-
-
-
-# A vous de faire le reste...

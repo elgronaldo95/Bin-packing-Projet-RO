@@ -3,15 +3,26 @@
 \usepackage[utf8]{inputenc}
 \usepackage{indentfirst}
 \usepackage{listings}
+\usepackage{fancyhdr}
 \usepackage[a4paper, total={6in, 8in}]{geometry}
 
 \title{Projet bin-packing - Recherche Opérationnelle}
 \author{Dominik Tanko et Gloire Samba}
 \date{2 Avril 2022}
 
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{684I}
+\lhead{Projet bin-packing}
+\cfoot{\thepage}
+
 \begin{document}
 
 \maketitle
+
+\renewcommand*\contentsname{Sommaire}
+\tableofcontents
+
 
 \newpage
 
@@ -42,10 +53,27 @@
     \begin{center}
         le tableau $[(5,2), (3,3)]$ devient $[5,5,3,3,3]$.
     \end{center}
-    Cette fonction est \texttt{tab\_objet\_taille\_reelle(d::donnees1D)}. 
-    En utilisant cela nous pouvons traduire la modélisation facilement.
+    Cette fonction est \texttt{tab\_objet\_taille\_reelle(d::donnees1D)}, en utilisant cela nous pouvons traduire la modélisation facilement. \newline
+    Si on essaie de résoudre les instances données dans \texttt{/1Dim/A} on peut voir qu'à part le fichier \texttt{jouet.dat} on n'arrive à rien résoudre. Le programme prend trop de temps. La même chose est observable avec les instances données dans \texttt{/1Dim/B}, le seul fichier résolu est \texttt{B4.dat}.
 
+\section{Motifs}
+    Avant de pouvoir commencer résoudre la modélisation indirecte, nous devons effectuer un traitement sur les données. Nous devons déterminer les différentes possibilités de remplissage maximum des bins. La fonction récursive \texttt{motifs\_calc()} est utilisée, ses entrées sont les suivantes :
+    \begin{itemize}
+        \item \texttt{indice\_type::Int} : utilisé pour parcourir les types possibles
+        \item \texttt{somme::Int} : utilisé récursivement pour suivre la somme des types d'objets posés dans un bin
+        \item \texttt{taille\_bin::Int} : la taille maximale d'un bin
+        \item \texttt{motif\_local::Vector{Int}} : le tableau utilisé localement pour créer un bin
+        \item \texttt{types::Vector{Int}} : le tableau des types possibles
+        \item \texttt{motifs::Vector{Vector{Int}}} : le tableau des motifs finaux
+    \end{itemize}
+    Cette fonction utilise une boucle simple dans chaque itération récursive. On parcours le tableau \texttt{types} et pour chaque élément, nous vérifions qu'un \texttt{type} de données peut être placé dans un bin ou pas. Si c'est le cas, on ajoute ce \texttt{type} dans le tableau de \texttt{motif\_local}. Puis on fusionne ce \texttt{motif\_local} avec le tableau final des \texttt{motifs}. On doit également "nettoyer" ce \texttt{motif\_local} du dernier \texttt{type} ajouté, qui correspond à revenir un niveau dans l'arbre des \texttt{motifs}.
+    
 
-\section{Conclusion}
+\section{Modélisation indirecte}
+    \subsection*{Uni-dimensionnelle}
+        Il s'agit de traduire la modélisation présentée dans le sujet, utilisant le pré-traitement des données avec la fonction présentée auparavant.
+
+    \subsection*{Bi-dimensionnelle}
+        Pour cette modélisation, nous pouvons encore reutiliser la fonction  \texttt{motifs\_calc}, le seul changement à effectuer est de changer la vérification si un objet peut rentrer dans un bin. On doit créer une fonction qui peut faire cette vérification.
 
 \end{document}

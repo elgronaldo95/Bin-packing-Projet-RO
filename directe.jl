@@ -45,14 +45,12 @@ function scriptMonoJouetA()
 	d::donnees1D = parser_data1D("Instances/1Dim/A/jouet.dat")
 	
     @time m = modelisation_direct(d)
-
     @time optimize!(m)
 
     status = termination_status(m)
 
     if status == MOI.OPTIMAL
         println("Problème résolu à l'optimalité")
-
         println("z = ", objective_value(m))
 
     elseif status == MOI.INFEASIBLE
@@ -61,5 +59,30 @@ function scriptMonoJouetA()
     elseif status == MOI.INFEASIBLE_OR_UNBOUNDED
         println("Problème impossible")
     end
+end
 
+
+function scriptMonoB()
+	d::donnees1D = parser_data1D("Instances/1Dim/B/B4.dat")
+	
+    indices::Vector{Int64} = [4,5,6,7,8,9,10,15,20]
+	for i in indices
+		d = parser_data1D("Instances/1Dim/B/B$i.dat")
+
+        @time m = modelisation_direct(d)
+        @time optimize!(m)
+
+        status = termination_status(m)
+
+        if status == MOI.OPTIMAL
+            println("Problème résolu à l'optimalité")
+            println("z = ", objective_value(m))
+
+        elseif status == MOI.INFEASIBLE
+            println("Problème non-borné")
+
+        elseif status == MOI.INFEASIBLE_OR_UNBOUNDED
+            println("Problème impossible")
+        end
+	end
 end
