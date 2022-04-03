@@ -92,7 +92,9 @@ end
 
 # include("heuristique_best-fit.jl")
 include("heuristique_best-fit_v2.jl")
+include("motifs.jl")
 include("directe.jl")
+include("indirecte.jl")
 
 
 # Exemple de script (à adapter) pour résoudre des séries d'instances

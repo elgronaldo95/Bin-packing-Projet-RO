@@ -1,6 +1,8 @@
 using JuMP, GLPK
 
-function tabObjetTailleReelle(d::donnees1D)
+# Retourne le tableau des objets en séparant chaque objet 
+# [(5, 3)] --> [5, 5, 5]
+function tab_objet_taille_reelle(d::donnees1D)
     tabTailleReelle::Vector{Int64} = []
 
     for i in d.tab
@@ -19,9 +21,8 @@ function modelisation_direct(d::donnees1D)
         m = Model(GLPK.Optimizer)
 
         nombre_bin =  heuristique_best_fit(d)
-        # nombre_objet = compte_objet(d)
 
-        tab_objet = tabObjetTailleReelle(d)
+        tab_objet = tab_objet_taille_reelle(d)
         nombre_objet = size(tab_objet, 1)
 
         # Déclaration des variables
@@ -41,7 +42,7 @@ end
 
 
 function scriptMonoJouetA()
-	d::donnees1D = parser_data1D("Instances/1Dim/A/Jouet.dat")
+	d::donnees1D = parser_data1D("Instances/1Dim/A/jouet.dat")
 	
     @time m = modelisation_direct(d)
 

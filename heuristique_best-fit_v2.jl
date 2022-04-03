@@ -3,7 +3,7 @@
 
 function heuristique_best_fit(d::donnees1D)
 
-    # D'abord on trie le tebleau des objets
+    # D'abord on trie le tableau des objets
     # rev = true : faut trier à l'inverse
     # alg = QuickSort : d'après les tests, QuickSort est le plus efficace
     sort!(d.tab, by = x -> x.taille, rev = true, alg = QuickSort)

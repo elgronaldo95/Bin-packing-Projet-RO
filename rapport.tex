@@ -1,5 +1,9 @@
 \documentclass{article}
+
 \usepackage[utf8]{inputenc}
+\usepackage{indentfirst}
+\usepackage{listings}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
 
 \title{Projet bin-packing - Recherche Opérationnelle}
 \author{Dominik Tanko et Gloire Samba}
@@ -15,7 +19,6 @@
     Le problème de bin-packing consiste à déterminer le nombre minimal de conteneurs (\textit{bins} en anglais) identiques pour ranger un ensemble d’objets de tailles diverses, sans qu’ils ne se chevauchent.
     Il nous est demandé de faire une implémentation des méthodes présentées dans le sujet du projet. Les méthodes présentées sont les suivantes : 
     \begin{itemize}
-        \item heuristique best-fit
         \item modélisation directe
         \item modélisation indirecte uni-dimensionnel
         \item modélisation indirecte bi-dimensionnel
@@ -23,9 +26,24 @@
     Pour faire cela nous utilisons Julia/JuMP/GLPK. Pour chaque modélisation de problème nous avons le choix entre différentes structures de données. Ces choix seront expliqués pour chaque section.
 
 \section{Heuristique best-fit}
-    Cette méthode consiste en triant les objets en ordre décroissant par rapport leur tailles
+    Le principe d’une heuristique est de construire rapidement une solution admissible sans avoir nécessairement de garantie théorique sur la qualité de la solution obtenue. Ici nous avons deux étapes principales pour obtenir un nombre de bins "minimal".
+    \begin{enumerate}
+        \item On trie les objets par taille décroissante,
+        \item On range chaque objet (dans l’ordre du tri) dans le bin ouvert le plus rempli, parmi les bins pouvant l’accueillir. Si aucun bin ouvert n’a la place suffisante, on ouvre un nouveau bin.
+    \end{enumerate}
+    Pour faire cela nous avons crée une fonction \texttt{heuristique\_best\_fit(d::données1D)}.
+    Cette fonction prend en entré un struct \texttt{donnees1D} défini auparavant. \newline
+    On commence par trier le table des objets stockés dans \texttt{d.tab}. On le trie en ordre décroissant avec l'algorithme \textit{Quicksort}. Nous avons choisi cet algorithme après avoir testé plusieurs algorithmes de tri \textit{(Merge sort, Bubble sort)}. La complexité temporelle de cet algorithme est de l'ordre $O(n^2)$ dans le pire cas et $O(n\log n)$ dans le cas moyen. La complexité spaciale est de l'ordre $O(n)$ dans le pire cas et $O(\log n)$ dans le cas moyen. \newline
+    Après, nous parcourons \texttt{d.tab} et pour pour chaque objet nous avons une boucle qui va de 1 au nombre d'objet de cette taille. Une troisième boucle à l'intérieur essaie de trouver un bin où l'objet peut être placé. Si on trouve un tel bin, on diminue la taille disponible dans ce bin par la taille de l'objet. On continue d'itérer dans ces boucles jusqu'à nous n'avons plus d'objets à ranger. A la fin, nous retournons la taille de table des bins, qui nous donne le nombre de bin minimal nécessaire pour pouvoir ranger tous les objets.
 
-\section{Motifs}
+
+\section{Modélisation directe}
+    Pour résoudre ce problème, une modélisation nous est fournie, donc il s'agit donc de traduire cette modélisation au langage Julia. La seule fonction qu'on doit ajouter en plus est une fonction qui "transforme" \texttt{d.tab} en un tableau qui contient chaque objet réellement. C'est-à-dire que
+    \begin{center}
+        le tableau $[(5,2), (3,3)]$ devient $[5,5,3,3,3]$.
+    \end{center}
+    Cette fonction est \texttt{tab\_objet\_taille\_reelle(d::donnees1D)}. 
+    En utilisant cela nous pouvons traduire la modélisation facilement.
 
 
 \section{Conclusion}
